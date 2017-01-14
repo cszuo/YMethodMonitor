@@ -1,0 +1,14 @@
+
+                //"local a = function(ppp)\n" +
+                //"  xpb:print(ppp)\n" +
+                //"end\n" +
+
+                //"function b(arg)\n" +
+                //"  a(arg)\n" +
+                //"  arg:print()\n" +
+                //"end\n" +
+
+                //"cc = xpb:newHookMethodInstance()\n" +
+                //"cc:hook(loadPackageParam,'edu.utd.s3.cszuo.methodmonitor.MethodMonitor','onCreate',{'android.os.Bundle'})\n" +
+                //"cc:setf(a)\n" +
+                //"b(loadPackageParam)" +

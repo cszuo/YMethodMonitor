@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/MethodMonitor.iml" filepath="$PROJECT_DIR$/MethodMonitor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/methodmonitorui/methodmonitorui.iml" filepath="$PROJECT_DIR$/methodmonitorui/methodmonitorui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rsyntaxtextarea/rsyntaxtextarea.iml" filepath="$PROJECT_DIR$/rsyntaxtextarea/rsyntaxtextarea.iml" />
+    </modules>
+  </component>
+</project>

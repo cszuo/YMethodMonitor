@@ -1,0 +1,12 @@
+apply plugin: 'java'
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile files('libs/XposedBridgeApi-54.jar')
+    compile project(path: ':rsyntaxtextarea')
+    compile 'com.fifesoft:rsyntaxtextarea:2.6.0'
+}
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
+
