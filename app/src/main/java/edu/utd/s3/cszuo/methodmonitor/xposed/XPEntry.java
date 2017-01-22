@@ -39,6 +39,7 @@ public class XPEntry implements IXposedHookLoadPackage {
             script = Utility.file2String(f);
             lloader.loadAndRun(f.getName(), script);
         }
+        //TESTT.run(loadPackageParam);
 /*
         lloader.loadAndRun("sss", "" +
                 "function handleLoadPackage(loadPackageParam)\n" +

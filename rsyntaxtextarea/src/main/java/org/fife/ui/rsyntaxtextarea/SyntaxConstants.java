@@ -157,7 +157,7 @@ public interface SyntaxConstants {
 	/**
 	 * Style for highlighting JSON.
 	 */
-	String SYNTAX_STYLE_JSON		= "text/json";
+	String SYNTAX_STYLE_JSON		= "text/org.json.patch";
 
 
 	/**

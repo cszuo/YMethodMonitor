@@ -1,5 +1,6 @@
 package edu.utd.s3.cszuo.methodmonitor.log;
 
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,18 +34,35 @@ public class HookedMethodCallLog extends JsonLog {
 
     private void addMethodHookParam(XC_MethodHook.MethodHookParam param) {
         JSONArray ja = new JSONArray();
+        JSONObject jso;
+        Object tmp;
+
+        tmp = param.thisObject;
+        jso = new JSONObject();
+        this.myput(jso, KEY_CLASS, tmp == null ? "null" : tmp.getClass());
+        this.myput(jso, KEY_VALUE, tmp == null ? "null" : trannsfer(tmp));
+        ja.put(jso);
+
+        tmp = param.getResult();
+        jso = new JSONObject();
+        this.myput(jso, KEY_CLASS, tmp == null ? "null" : tmp.getClass());
+        this.myput(jso, KEY_VALUE, tmp == null ? "null" : trannsfer(tmp));
+        ja.put(jso);
+
+
         for (Object obj : param.args) {
-            JSONObject jso = new JSONObject();
+            jso = new JSONObject();
             this.myput(jso, KEY_CLASS, obj == null ? "null" : obj.getClass());
-            this.myput(jso, KEY_VALUE, obj == null ? "null" : trannsfer( obj));
+            this.myput(jso, KEY_VALUE, obj == null ? "null" : trannsfer(obj));
             ja.put(jso);
         }
+
         this.myput(this, KEY_PARAM, ja);
     }
 
-    public Object trannsfer(Object obj){
-        if(obj instanceof char[])
-            return new String((char[])obj);
+    public Object trannsfer(Object obj) {
+        if (obj instanceof char[])
+            return new String((char[]) obj);
         return obj;
     }
 
@@ -71,7 +89,7 @@ public class HookedMethodCallLog extends JsonLog {
         for (int i = 0; i < ja.length(); i++) {
             try {
                 jso = ja.getJSONObject(i);
-                obss[i][0] = i + 1;
+                obss[i][0] = i - 2;
                 obss[i][1] = myget(jso, KEY_CLASS).toString();
                 obss[i][2] = myget(jso, KEY_VALUE).toString();
 
@@ -79,6 +97,8 @@ public class HookedMethodCallLog extends JsonLog {
                 e.printStackTrace();
             }
         }
+        obss[0][0] = "this";
+        obss[1][0] = "return";
         return obss;
     }
 

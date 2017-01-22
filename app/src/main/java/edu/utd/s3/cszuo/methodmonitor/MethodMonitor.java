@@ -18,18 +18,22 @@ import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+
+import javax.net.ssl.HttpsURLConnection;
+
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -138,14 +142,26 @@ public class MethodMonitor extends AppCompatPreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setupActionBar();
 
-        try {
-            Toast.makeText(this, KeyStore.getInstance("PKCS12").getClass().toString(), Toast.LENGTH_LONG).show();
-            KeyStore.getInstance("PKCS12").load(null,"a".toCharArray());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        //Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("proxy.lizongbo.com", 8080));
+
+        new Thread() {
+            public void run() {
+                URL url = null;
+                try {
+                    url = new URL("https://baidu.com/");
+                    HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+                    Log.i("HttpsURLConnection", urlConnection.getClass().toString());
+                    javax.net.ssl.SSLSocketFactory aa = HttpsURLConnection.getDefaultSSLSocketFactory();
+                    urlConnection.setSSLSocketFactory(aa);
+                    InputStream in = urlConnection.getInputStream();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
 
         File destDir = new File(LUAPATH);
         if (!destDir.exists()) {

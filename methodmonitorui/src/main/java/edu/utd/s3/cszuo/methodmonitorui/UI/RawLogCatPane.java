@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JToolBar;
+import javax.swing.SwingUtilities;
 
 /**
  * Created by cszuo on 1/8/17.
@@ -27,7 +28,7 @@ public class RawLogCatPane extends JPanel implements ILogcatWatcher {
                 JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS), BorderLayout.CENTER);
 
         JToolBar toolBar = new JToolBar();
-        toolBar.setFloatable( false);
+        toolBar.setFloatable(false);
         JButton clearb = new JButton("clear");
         clearb.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -42,7 +43,14 @@ public class RawLogCatPane extends JPanel implements ILogcatWatcher {
     }
 
     @Override
-    public void newLine(String line) {
-        textArea.append(line + "\n");
+    public void newLine(final String line) {
+        // SwingUtilities.invokeLater(new Runnable() {
+        // @Override
+        // public void run () {
+        //     textArea.append(line + "\n");
+        // }
+        // }
+
+        // );
     }
 }

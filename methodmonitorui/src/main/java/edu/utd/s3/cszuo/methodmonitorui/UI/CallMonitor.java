@@ -1,5 +1,6 @@
 package edu.utd.s3.cszuo.methodmonitorui.UI;
 
+import edu.utd.s3.cszuo.methodmonitor.log.transport.IDatareceiver;
 import edu.utd.s3.cszuo.methodmonitorui.adb.ILogcatWatcher;
 import edu.utd.s3.cszuo.methodmonitor.log.HookedMethodCallLog;
 import edu.utd.s3.cszuo.methodmonitor.log.JsonLog;
@@ -9,6 +10,8 @@ import java.awt.BorderLayout;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -25,12 +28,14 @@ import javax.swing.table.TableRowSorter;
  * Created by cszuo on 1/8/17.
  */
 
-public class CallMonitor extends JPanel implements ILogcatWatcher, IMessageReceiver, ListSelectionListener {
+public class CallMonitor extends JPanel implements IDatareceiver, IMessageReceiver, ListSelectionListener {
     AppTree apps;
     JTable mytable;
     DefaultTableModel tablemodel;
     DetailedTabbedPane detailtabpane;
-    JTextArea logtextArea;
+
+    JTable logtextArea;
+    DefaultTableModel logtextAreamodel;
 
     public CallMonitor() {
         this.setLayout(new BorderLayout(0, 0));
@@ -50,10 +55,9 @@ public class CallMonitor extends JPanel implements ILogcatWatcher, IMessageRecei
         final JSplitPane treeArest = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, sapps, tabArest);
 
 
-        logtextArea = new JTextArea();
-        logtextArea.setEditable(false);
-        JScrollPane slogs = new JScrollPane(logtextArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        logtextArea = initUI_LogTable();
+        //logtextArea.setEditable(false);
+        JScrollPane slogs = new JScrollPane(logtextArea);
 
         final JSplitPane logArest = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
                 treeArest, slogs);
@@ -75,8 +79,8 @@ public class CallMonitor extends JPanel implements ILogcatWatcher, IMessageRecei
 
     public JTable initUI_Table() {
         JTable mytable = new JTable();
-        String[] names = {"ID", "From", "Signature", "Pending"};
-        int[] widths = {50, 150, 1300, 150};
+        String[] names = {"ID", "Thread", "From", "Signature", "Pending"};
+        int[] widths = {50, 150, 150, 1300, 150};
         tablemodel = new DefaultTableModel(null, names);
         mytable.setModel(tablemodel);
         mytable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -91,6 +95,19 @@ public class CallMonitor extends JPanel implements ILogcatWatcher, IMessageRecei
         return mytable;
     }
 
+    public JTable initUI_LogTable() {
+        JTable mytable = new JTable();
+        String[] names = {"ID", "Level", "Message"};
+        int[] widths = {10, 10, 1300};
+        logtextAreamodel = new DefaultTableModel(null, names);
+        mytable.setModel(logtextAreamodel);
+        mytable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+        for (int i = 0; i < widths.length; i++) {
+            mytable.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);
+        }
+        return mytable;
+    }
+/*
     @Override
     public void newLine(String line) {
         if (line.contains("XOXXOOXXXOOO")) {
@@ -103,23 +120,26 @@ public class CallMonitor extends JPanel implements ILogcatWatcher, IMessageRecei
             }
         }
     }
-
+*/
 
     @Override
     public void clear() {
-        logtextArea.setText("");
+        //logtextArea.setText("");
+        logtextAreamodel.getDataVector().removeAllElements();
+        logtextAreamodel.fireTableDataChanged();
         tablemodel.getDataVector().removeAllElements();
         tablemodel.fireTableDataChanged();
     }
 
     @Override
     public void newMsg(JsonLog jlog) {
-        logtextArea.append(jlog.toString() + "\n");
         if (jlog.getLevel() == LogLevel.HOOKEDCALL.getLevel()) {
             HookedMethodCallLog hmclog = HookedMethodCallLog.parse(jlog.toString());
             CallTableRowItem ritem = new CallTableRowItem(hmclog);
             ritem.pack(tablemodel.getRowCount());
             tablemodel.addRow(ritem);
+        } else {
+            logtextAreamodel.addRow(new Object[]{logtextAreamodel.getRowCount(), jlog.getLevel(), jlog.getMessage()});
         }
     }
 
@@ -132,5 +152,10 @@ public class CallMonitor extends JPanel implements ILogcatWatcher, IMessageRecei
             } catch (ArrayIndexOutOfBoundsException e) {
             }
         }
+    }
+
+    @Override
+    public void newJsonLog(JsonLog jlog) {
+        apps.addLog(jlog);
     }
 }

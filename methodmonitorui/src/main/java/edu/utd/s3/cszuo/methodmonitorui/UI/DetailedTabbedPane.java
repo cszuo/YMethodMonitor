@@ -8,6 +8,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -15,12 +17,17 @@ import javax.swing.table.DefaultTableModel;
  */
 
 public class DetailedTabbedPane extends JTabbedPane {
+
+
     HookedMethodCallLog hmclog;
 
     public void setHookedMethodCallLog(HookedMethodCallLog hmclog) {
+        int index = this.getSelectedIndex();
+        if (index < 0) index = 0;
         this.hmclog = hmclog;
         refreshUI();
         this.setTabPlacement(JTabbedPane.TOP);
+        this.setSelectedIndex(index);
     }
 
     private void refreshUI() {

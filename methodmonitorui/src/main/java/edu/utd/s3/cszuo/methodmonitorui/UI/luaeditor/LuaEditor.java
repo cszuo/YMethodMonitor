@@ -6,7 +6,6 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
@@ -14,18 +13,15 @@ import java.awt.event.ComponentEvent;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.logging.Logger;
 
 import javax.swing.JButton;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.TreeSelectionEvent;
@@ -92,11 +88,16 @@ public class LuaEditor extends JPanel implements ILuaWriterWatcher, ILuaReaderWa
     }
 
     public void loadLuas() {
-        luass.clear();
-        top.removeAllChildren();
-        dt.reload();
-        targetS = null;
-        new LuaScriptReader(LuaEditor.this).start();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                luass.clear();
+                top.removeAllChildren();
+                dt.reload();
+                targetS = null;
+                new LuaScriptReader(LuaEditor.this).start();
+            }
+        });
     }
 
     public JToolBar initMenuBar() {
@@ -127,11 +128,18 @@ public class LuaEditor extends JPanel implements ILuaWriterWatcher, ILuaReaderWa
     }
 
     SimpleDateFormat dateformat = new SimpleDateFormat("HH:mm:ss ");
+
     @Override
     public void info(String str) {
         str = String.format("[%s] info: %s\n", dateformat.format(new Date()), str);
 
-        logtextArea.append(str);
+        final String finalStr = str;
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                logtextArea.append(finalStr);
+            }
+        });
     }
 
     @Override
@@ -140,11 +148,16 @@ public class LuaEditor extends JPanel implements ILuaWriterWatcher, ILuaReaderWa
     }
 
     @Override
-    public void newLuas(String name, String content) {
-        DefaultMutableTreeNode script = new DefaultMutableTreeNode(name);
-        luass.put(script, content);
-        top.add(script);
-        dt.reload();
+    public void newLuas(final String name, final String content) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                DefaultMutableTreeNode script = new DefaultMutableTreeNode(name);
+                luass.put(script, content);
+                top.add(script);
+                dt.reload();
+            }
+        });
     }
 
     @Override

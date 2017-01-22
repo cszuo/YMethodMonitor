@@ -3,8 +3,11 @@
     <words>
       <w>dname</w>
       <w>jlog</w>
+      <w>mcla</w>
+      <w>methodname</w>
       <w>mreceiver</w>
       <w>pkgname</w>
+      <w>slen</w>
     </words>
   </dictionary>
 </component>

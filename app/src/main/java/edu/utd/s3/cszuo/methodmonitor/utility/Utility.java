@@ -1,11 +1,19 @@
 package edu.utd.s3.cszuo.methodmonitor.utility;
 
+
+import android.util.Base64;
+
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import edu.utd.s3.cszuo.methodmonitor.log.ErrorLog;
@@ -16,8 +24,11 @@ import edu.utd.s3.cszuo.methodmonitor.log.ErrorLog;
 
 public class Utility {
     public static Class<?> getClass(String classname, ClassLoader loader) {
+        //if (classname.equals("int")) return int.class;
+        //else if (classname.equals("String")) return String.class;
+        //else if (classname.equals("boolean")) return boolean.class;
         try {
-            return Class.forName(classname, false, loader);
+            return ClassUtils.forName(classname, loader);
         } catch (ClassNotFoundException e) {
             return null;
         }
@@ -28,7 +39,7 @@ public class Utility {
         for (int i = 0; i < args.length; i++) {
             args[i] = Utility.getClass(classnames[i], loader);
             if (args[i] == null) {
-                ErrorLog.log(loadPackageParam.packageName, "Class " + classnames[i] + "not found");
+                ErrorLog.log(loadPackageParam.packageName, "Class " + classnames[i] + " not found");
                 return null;
             }
         }
@@ -62,6 +73,14 @@ public class Utility {
 
 
     public static String stream2String(InputStream is) throws IOException {
+        ByteArrayInputStream bais = new ByteArrayInputStream("".getBytes());
+        try {
+            KeyStore.getInstance("BKS").load(bais, new char[]{});
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
         String line = null;
@@ -69,6 +88,7 @@ public class Utility {
             sb.append(line).append("\n");
         }
         reader.close();
+
         return sb.toString();
     }
 }

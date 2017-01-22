@@ -1,5 +1,7 @@
 package edu.utd.s3.cszuo.methodmonitorui.UI;
 
+import edu.utd.s3.cszuo.methodmonitor.log.transport.ITransportLayer;
+import edu.utd.s3.cszuo.methodmonitor.log.transport.LogcatTransferLayer;
 import edu.utd.s3.cszuo.methodmonitorui.UI.luaeditor.LuaEditor;
 import edu.utd.s3.cszuo.methodmonitorui.adb.DevicesDetector;
 import edu.utd.s3.cszuo.methodmonitorui.adb.IDevicesWatcher;
@@ -17,6 +19,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 
 /**
  * Created by cszuo on 1/8/17.
@@ -33,8 +36,12 @@ public class Mainframe extends JFrame implements IDevicesWatcher {
     JMenu cdevices = new JMenu("Connected Devices");
     LogCatReader lreader = null;
 
+    ITransportLayer transportlayer;
+
     public Mainframe() {
         initUI();
+        transportlayer = LogcatTransferLayer.getInstance();
+        transportlayer.setDataReceiver(cmonitorpane);
     }
 
     public void initUI() {
@@ -74,16 +81,21 @@ public class Mainframe extends JFrame implements IDevicesWatcher {
 
     @Override
     public void newDevices(final String dname) {
-        JMenuItem menuItem = new JMenuItem(dname);
-        menuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                lreader = new LogCatReader(dname);
-                //lreader.regLogcatWatcher(Mainframe.this);
-                lreader.regLogcatWatcher(cmonitorpane);
-                lreader.regLogcatWatcher(rcatpane);
-                lreader.start();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                JMenuItem menuItem = new JMenuItem(dname);
+                menuItem.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        lreader = new LogCatReader(dname);
+                        //lreader.regLogcatWatcher(Mainframe.this);
+                        lreader.regLogcatWatcher(LogcatTransferLayer.getInstance());
+                        lreader.regLogcatWatcher(rcatpane);
+                        lreader.start();
+                    }
+                });
+                cdevices.add(menuItem);
             }
         });
-        cdevices.add(menuItem);
     }
 }

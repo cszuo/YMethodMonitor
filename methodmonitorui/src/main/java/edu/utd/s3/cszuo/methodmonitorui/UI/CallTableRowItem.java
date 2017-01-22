@@ -15,13 +15,14 @@ public class CallTableRowItem extends Vector<Object> {
         this.hmclog = hmclog;
     }
 
-    public HookedMethodCallLog getHookedMethodCallLog(){
+    public HookedMethodCallLog getHookedMethodCallLog() {
         return hmclog;
     }
 
     public Vector<Object> pack(int index) {
         this.clear();
         this.add(index);
+        this.add(hmclog.getThread());
         this.add(hmclog.getFrom());
         this.add(hmclog.getSignature());
         this.add(hmclog.getPending());

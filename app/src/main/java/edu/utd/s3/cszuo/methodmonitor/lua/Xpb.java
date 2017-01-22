@@ -25,6 +25,9 @@ public class Xpb {
         return new HookConstructorInstance(loadPackageParam);
     }
 
+    public String getClassName(Object obj) {
+        return obj.getClass().getName().toString();
+    }
 
     public void print(Object x) {
         XposedBridge.log("let's print " + x);

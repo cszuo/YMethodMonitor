@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JTree;
+import javax.swing.SwingUtilities;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -51,26 +52,32 @@ public class AppTree extends JTree implements TreeSelectionListener {
         dt.reload();
     }
 
-    public void addLog(JsonLog jlog) {
-        synchronized (alllogs) {
-            alllogs.add(jlog);
-        }
-        String pkgname = jlog.getPackageName();
-        if (!logs.containsKey(pkgname)) {
-            logs.put(pkgname, new ArrayList<JsonLog>());
-            newApp(pkgname);
-        }
-        synchronized (logs.get(pkgname)) {
-            logs.get(pkgname).add(jlog);
-        }
-        refresh(pkgname);
-        if (targetApp == null || targetApp.equals(pkgname))
-            mreceiver.newMsg(jlog);
+    public void addLog(final JsonLog jlog) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (alllogs) {
+                    alllogs.add(jlog);
+                }
+                String pkgname = jlog.getPackageName();
+                if (!logs.containsKey(pkgname)) {
+                    logs.put(pkgname, new ArrayList<JsonLog>());
+                    newApp(pkgname);
+                }
+                synchronized (logs.get(pkgname)) {
+                    logs.get(pkgname).add(jlog);
+                }
+                refresh(pkgname);
+                if (targetApp == null || targetApp.equals(pkgname))
+                    mreceiver.newMsg(jlog);
+            }
+        });
     }
 
     @Override
     public void valueChanged(TreeSelectionEvent treeSelectionEvent) {
         DefaultMutableTreeNode node = (DefaultMutableTreeNode) this.getLastSelectedPathComponent();
+        //System.out.println(System.currentTimeMillis() + " A");
         if (node == top) {
             targetApp = null;
         } else {
@@ -81,8 +88,9 @@ public class AppTree extends JTree implements TreeSelectionListener {
                 }
             }
         }
-        List<JsonLog> fsend = null;
+        //System.out.println(System.currentTimeMillis() + " B");
         mreceiver.clear();
+        //System.out.println(System.currentTimeMillis() + " C");
         if (targetApp == null) {
             synchronized (alllogs) {
                 for (JsonLog jlog : alllogs) {
@@ -90,9 +98,12 @@ public class AppTree extends JTree implements TreeSelectionListener {
                 }
             }
         } else {
+            //System.out.println(System.currentTimeMillis() + " D");
             synchronized (logs.get(targetApp)) {
+                //System.out.println(System.currentTimeMillis() + " E");
                 for (JsonLog jlog : logs.get(targetApp)) {
                     mreceiver.newMsg(jlog);
+                    //System.out.println(System.currentTimeMillis() + " F");
                 }
             }
         }

@@ -12,3 +12,98 @@
                 //"cc:hook(loadPackageParam,'edu.utd.s3.cszuo.methodmonitor.MethodMonitor','onCreate',{'android.os.Bundle'})\n" +
                 //"cc:setf(a)\n" +
                 //"b(loadPackageParam)" +
+function isTarget(packagename)
+        return packagename == 'com.starbucks.mobilecard'
+end
+
+function bA(param, pending)
+        pending:append('crypto ')
+        --pending:append(param:getResult():getClass():toString())
+end
+
+function vv(param, pending)
+        				pending:append('openConnection ')
+        				a1 = param:getResult()
+        				a2 = xpb:getClassName(a1)
+        				pending:append(a2)
+                        	--aa = xpb:newHookMethodInstance()
+        				--aa:hook(loadPackageParam,param:getResult():getClass():toString(),'setSSLSocketFactory',{'javax.net.ssl.SSLSocketFactory'})
+        				--aa:setLuaBeforehook(function(parama, pendinga)
+                		--	pendinga:append('setSSLSocketFactory ')
+			 		--	parama.args[1] = parama.args[1]:getDefault()
+        				--end)
+end
+
+function handleLoadPackage(loadPackageParam)
+        --cc = xpb:newHookMethodInstance()
+        --cc:hook(loadPackageParam,'java.security.MessageDigest','getInstance',{'java.lang.String'})
+        --cc:setLuaBeforehook(bA)
+
+        --cc = xpb:newHookMethodInstance()
+        --cc:hook(loadPackageParam,'java.security.MessageDigest','digest',{'[B'})
+        --cc:setLuaBeforehook(bA)
+
+        cc = xpb:newHookMethodInstance()
+        cc:hook(loadPackageParam,'java.security.KeyStore','getInstance',{'java.lang.String'})
+        cc:setLuaBeforehook(bA)
+
+        cc = xpb:newHookMethodInstance()
+        cc:hook(loadPackageParam,'java.security.KeyStore','load',{'java.io.InputStream','[C'})
+        cc:setLuaBeforehook(bA)
+        --cc:setLuaBeforehook(function(param, pending)
+        --        pending:append('cryptos ')
+        --        jframe = luajava.bindClass("java.lang.String")
+        --        frame = luajava.newInstance("java.lang.String", param.args[2]);
+        --        pending:append(frame)
+        --end)
+        --[[
+        cc = xpb:newHookMethodInstance()
+        cc:hook(loadPackageParam,'javax.net.ssl.SSLContext','getSocketFactory',{})
+        cc:setLuaAfterhook(bA)
+
+        cc = xpb:newHookMethodInstance()
+        cc:hook(loadPackageParam,'javax.net.ssl.SSLContext','getServerSocketFactory',{})
+        cc:setLuaAfterhook(bA)
+
+        cc = xpb:newHookMethodInstance()
+        cc:hook(loadPackageParam,'javax.net.ssl.SSLContext','createSSLEngine',{})
+        cc:setLuaAfterhook(bA)
+
+        cc = xpb:newHookMethodInstance()
+        cc:hook(loadPackageParam,'javax.net.ssl.SSLContext','createSSLEngine',{'java.lang.String','java.lang.Integer'})
+        cc:setLuaAfterhook(bA)
+
+        ]]--
+        cc = xpb:newHookMethodInstance()
+        cc:hook(loadPackageParam,'com.starbucks.mobilecard.services.core.BaseSpiceServiceRequest','buildAndExecuteRequest',{'java.lang.String','java.lang.String','java.lang.Class','java.lang.Object','java.util.ArrayList','int','o.fQ$ˋ$if'},3000)
+        cc:setLuaBeforehook(bA)
+
+        cc = xpb:newHookMethodInstance()
+        cc:hook(loadPackageParam,'java.net.Socket','startupSocket',{'java.net.InetAddress','int','java.net.InetAddress','int','boolean'})
+        cc:setLuaBeforehook(bA)
+        cc = xpb:newHookMethodInstance()
+        cc:hook(loadPackageParam,'java.net.Socket','connect',{'java.net.SocketAddress','int'})
+        cc:setLuaBeforehook(bA)
+
+        cc = xpb:newHookMethodInstance()
+        cc:hook(loadPackageParam,'java.net.URL','openConnection',{})
+        cc:setLuaAfterhook(vv)
+
+        cc = xpb:newHookMethodInstance()
+        cc:hook(loadPackageParam,'java.net.URL','openConnection',{'java.net.Proxy'})
+        cc:setLuaBeforehook(bA)
+--[[
+        cc = xpb:newHookMethodInstance()
+        cc:hook(loadPackageParam,'com.android.okhttp.internal.http.HttpsURLConnectionImpl','setRequestProperty',{'String','String'})
+        cc:setLuaBeforehook(bA)
+        cc = xpb:newHookMethodInstance()
+        cc:hook(loadPackageParam,'com.android.okhttp.internal.http.HttpsURLConnectionImpl','setSSLSocketFactory',{'javax.net.ssl.SSLSocketFactory'})
+        cc:setLuaBeforehook(function(param, pending)
+                pending:append('setSSLSocketFactory ')
+			 --param.args[1] = param.args[1]:getDefault()
+        end)
+]]--
+
+
+
+end
