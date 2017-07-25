@@ -10,6 +10,9 @@ public class Driver {
     public static void main(String[] args) throws Exception {
         //UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
 
+        String a = "dd8ba8db2a774457269c1258ec26d391".substring(0,7);
+        System.out.println(a);
+
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {

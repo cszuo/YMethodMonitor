@@ -56,6 +56,7 @@ public class HookCallback extends XC_MethodHook {
 
     @Override
     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+
         StringBuilder pending = new StringBuilder();
         if (lua_afterhook != null) {
             try {

@@ -7,6 +7,7 @@ import org.luaj.vm2.lib.jse.JsePlatform;
 
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import edu.utd.s3.cszuo.methodmonitor.log.ErrorLog;
 import edu.utd.s3.cszuo.methodmonitor.log.InfoLog;
 
 /**
@@ -30,8 +31,17 @@ public class LuaLoader {
     }
 
     public void loadAndRun(String sname, String script) {
+        LuaValue chunk = null;
+cd
+        try{
+            chunk = globals.load(script, sname);
+        }catch(Exception e) {
+            String log = "Script: " + sname + " load error: " + e;
+            ErrorLog.log(loadPackageParam.packageName, log);
+            XposedBridge.log(loadPackageParam.packageName + ": " + log);
+            return;
+        }
 
-        LuaValue chunk = globals.load(script, sname);
         chunk.call();
 
         LuaValue f_isTarget = globals.get(FUNCTION_ISTARGET);

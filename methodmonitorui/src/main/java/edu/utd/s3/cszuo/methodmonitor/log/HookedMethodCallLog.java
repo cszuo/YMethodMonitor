@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import de.robv.android.xposed.XC_MethodHook;
+import edu.utd.s3.cszuo.methodmonitor.log.transport.Base64;
 
 /**
  * Created by cszuo on 1/7/17.
@@ -63,6 +64,8 @@ public class HookedMethodCallLog extends JsonLog {
     public Object trannsfer(Object obj) {
         if (obj instanceof char[])
             return new String((char[]) obj);
+        if (obj instanceof byte[])
+            return Base64.encodeToString((byte[])obj,Base64.NO_WRAP);
         return obj;
     }
 

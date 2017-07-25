@@ -1,6 +1,10 @@
 package edu.utd.s3.cszuo.methodmonitor;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.res.Configuration;
+import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.support.annotation.LayoutRes;
@@ -26,6 +30,7 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
         getDelegate().onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
     }
+
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {

@@ -1,5 +1,7 @@
 package edu.utd.s3.cszuo.methodmonitor.lua;
 
+import android.util.Base64;
+
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import edu.utd.s3.cszuo.methodmonitor.xposed.HookConstructorInstance;
@@ -29,6 +31,9 @@ public class Xpb {
         return obj.getClass().getName().toString();
     }
 
+    public String byteArray2String(byte[] data){
+       return Base64.encodeToString(data,Base64.NO_WRAP);
+    }
     public void print(Object x) {
         XposedBridge.log("let's print " + x);
     }

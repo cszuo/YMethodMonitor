@@ -50,23 +50,24 @@ public class HookMethodInstance extends HookCallback {
         hookMethod(Arrays.asList(method), this);
     }
 
-    public void hook(final XC_LoadPackage.LoadPackageParam loadPackageParam, final String classname, final String methodname, final String[] margs, int delay) {
+    public HookMethodInstance hook(final XC_LoadPackage.LoadPackageParam loadPackageParam, final String classname, final String methodname, final String[] margs, int delay) {
         Utility.dalayrun(new Runnable() {
             @Override
             public void run() {
                 hook(loadPackageParam, classname, methodname, margs);
             }
         }, delay);
+        return this;
     }
 
-    public void hook(XC_LoadPackage.LoadPackageParam loadPackageParam, String classname, String methodname) {
+    public HookMethodInstance hook(XC_LoadPackage.LoadPackageParam loadPackageParam, String classname, String methodname) {
 
         XposedBridge.log("HookMethodInstance " + classname + methodname);
 
         Class<?> mcla = Utility.getClass(classname, loadPackageParam.classLoader);
         if (mcla == null) {
             ErrorLog.log(loadPackageParam.packageName, "Class " + classname + " not found");
-            return;
+            return this;
         }
 
         ArrayList mm = new ArrayList();
@@ -79,6 +80,8 @@ public class HookMethodInstance extends HookCallback {
         signature = classname + " " + methodname;
 
         hookMethod(mm, this);
+
+        return this;
     }
 
     public void hook(final XC_LoadPackage.LoadPackageParam loadPackageParam, final String classname, final String methodname, int delay) {

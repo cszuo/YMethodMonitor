@@ -115,15 +115,24 @@ public class LuaEditor extends JPanel implements ILuaWriterWatcher, ILuaReaderWa
         toolBar.add(bread);
         toolBar.addSeparator();
 
-        JButton bwrite = new JButton("Write All Scripts");
+        JButton bwrite = new JButton("Save All Scripts");
         bwrite.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 new LuaScriptWriter(LuaEditor.this, luass).start();
             }
         });
-
         toolBar.add(bwrite);
         toolBar.addSeparator();
+
+        JButton bcreator = new JButton("Create New Script");
+        bcreator.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                new LuaScriptCreator(LuaEditor.this).start();
+            }
+        });
+        toolBar.add(bcreator);
+        toolBar.addSeparator();
+
         return toolBar;
     }
 

@@ -7,8 +7,8 @@ import java.util.ArrayList;
  */
 
 public class DevicesDetector extends Thread {
-    public static String adb = "/home/cszuo/Android/Sdk/platform-tools/adb";
-    //public static String adb = "adb";
+    //public static String adb = "/home/cszuo/Android/Sdk/platform-tools/adb";
+    public static String adb = "adb";
 
     ArrayList<IDevicesWatcher> dws = new ArrayList<IDevicesWatcher>();
 

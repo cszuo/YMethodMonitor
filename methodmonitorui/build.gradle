@@ -5,6 +5,7 @@ dependencies {
     compile files('libs/XposedBridgeApi-54.jar')
     compile 'com.fifesoft:rsyntaxtextarea:2.6.0'
     compile 'org.json:json:20160810'
+    //compile project(':rsyntaxtextarea')
 }
 
 sourceCompatibility = "1.7"
